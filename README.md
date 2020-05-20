@@ -7,7 +7,7 @@ Loading JsonPlaceholder Photo API data and display in gridlayout.
 
 ### Start Page
 
-Show app anme and request storage permission from user to enter maain page.  
+Show app name and request storage permission from user to enter maain page.  
 
 
 ### Main Page
