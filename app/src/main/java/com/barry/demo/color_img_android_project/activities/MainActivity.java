@@ -6,9 +6,11 @@ import androidx.paging.PagedList;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.barry.demo.color_img_android_project.R;
 import com.barry.demo.color_img_android_project.adapter.PhotoListAdapter;
@@ -27,6 +29,8 @@ public class MainActivity extends BaseActivity {
 
     private PhotoListAdapter adapter;
 
+    private SwipeRefreshLayout swipelayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setContentView(R.layout.activity_main);
@@ -36,6 +40,7 @@ public class MainActivity extends BaseActivity {
     @Override
     void bindView() {
         img_color_recyclerview = findViewById(R.id.activity_main_color_img_recyclerview);
+        swipelayout = findViewById(R.id.swipelayout);
     }
 
     @Override
@@ -54,6 +59,36 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onChanged(PagedList<ColorImgModel> colorImgModels) {
                 adapter.submitList(colorImgModels);
+            }
+        });
+
+        viewModel.getLoadStata_MutableLivedata().observe(this, new Observer<Integer>() {
+            @Override
+            public void onChanged(Integer integer) {
+                if (integer != null) {
+                    switch (integer) {
+                        case 0:
+                            swipelayout.setRefreshing(false);
+                            break;
+                        case 1:
+                            swipelayout.setRefreshing(true);
+                            break;
+                        case 2:
+                            swipelayout.setRefreshing(false);
+                            break;
+                        case 3:
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(MainActivity.this,"api timeout error, tring again",Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                            swipelayout.setRefreshing(false);
+                            break;
+                        default:
+                            break;
+                    }
+                }
             }
         });
     }

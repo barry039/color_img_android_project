@@ -50,26 +50,6 @@ public class PhotoListAdapter extends PagedListAdapter<ColorImgModel, PhotoListA
             holder.id.setText(colorImgModel.getId() + "");
             holder.title.setText(colorImgModel.getTitle());
             imageLoader.DisplayImage(colorImgModel.getThumbnailUrl(), holder.imageView);
-//            OkHttpClient client = new OkHttpClient();
-//            Request request = new Request.Builder().url(colorImgModel.getThumbnailUrl()).build();
-//            client.newCall(request).enqueue(new Callback() {
-//                public void onFailure(Call call, IOException e) {
-//                    e.printStackTrace();
-//                }
-//                public void onResponse(Call call, Response response) throws IOException {
-//                    if (!response.isSuccessful()) {
-//                        throw new IOException("Fail" + response);
-//                    }
-//                    InputStream inputStream = response.body().byteStream();
-//                    Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-//                    new Handler(Looper.getMainLooper()).post(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            holder.imageView.setImageBitmap(bitmap);
-//                        }
-//                    });
-//                }
-//            });
         } catch (Exception e) {
             e.printStackTrace();
         }

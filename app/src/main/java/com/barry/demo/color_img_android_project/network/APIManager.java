@@ -51,13 +51,14 @@ public class APIManager {
 
     // create okhttp client
     private void initOkhttp() {
-        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-// set your desired log level
-        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
         okHttpClient = new OkHttpClient.Builder()
-                .connectTimeout(60, TimeUnit.SECONDS)
-                .addInterceptor(logging)
+                .connectTimeout(10, TimeUnit.SECONDS)
+                .readTimeout(10,TimeUnit.SECONDS)
                 .build();
+    }
+
+    public OkHttpClient getOkHttpClient() {
+        return okHttpClient;
     }
 
     // create retrofit

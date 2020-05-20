@@ -40,9 +40,9 @@ public abstract class BaseActivity extends AppCompatActivity {
         return ActivityCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED;
     }
 
-    protected void requestPermission(String[] permissions)
+    protected void requestPermission(String[] permissions,int request_code)
     {
-        ActivityCompat.requestPermissions(this, permissions, 1001);
+        ActivityCompat.requestPermissions(this, permissions, request_code);
     }
 
 }

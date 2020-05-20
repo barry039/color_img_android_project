@@ -3,11 +3,14 @@ package com.barry.demo.color_img_android_project;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.StrictMode;
 import android.util.Log;
 import android.widget.ImageView;
+
+import com.barry.demo.color_img_android_project.network.APIManager;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -153,7 +156,7 @@ public class ImageLoader {
         try {
             URL imageUrl = new URL(url);
             Log.e("URL",imageUrl.toString());
-            OkHttpClient client = new OkHttpClient();
+            OkHttpClient client = APIManager.getINSTANCE().getOkHttpClient();
             Request request = new Request.Builder().url(url).build();
             Response response = client.newCall(request).execute();
             if (!response.isSuccessful()) {
@@ -163,8 +166,10 @@ public class ImageLoader {
             fos.write(response.body().bytes());
             fos.flush();
             fos.close();
-            bitmap = decodeFile(f);
 
+            bitmap = decodeFile(f);
+            FileOutputStream outputStream = new FileOutputStream(f.getAbsolutePath());
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
             return bitmap;
 
         } catch (Throwable ex){

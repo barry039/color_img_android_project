@@ -2,6 +2,7 @@ package com.barry.demo.color_img_android_project.viewmodel;
 
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.paging.LivePagedListBuilder;
 import androidx.paging.PagedList;
 
@@ -23,10 +24,13 @@ public class MainViewModel extends BaseViewModel {
         PagedList.Config pagedListConfig =
                 (new PagedList.Config.Builder())
                         .setEnablePlaceholders(false)
-                        .setPageSize(100).build();
-
+                        .setPageSize(200).build();
         photoPagedList = new LivePagedListBuilder(photoRepository, pagedListConfig)
                 .build();
+    }
+
+    public LiveData<Integer> getLoadStata_MutableLivedata() {
+        return photoRepository.getLoadstate_mutablelivedata();
     }
 
 }
