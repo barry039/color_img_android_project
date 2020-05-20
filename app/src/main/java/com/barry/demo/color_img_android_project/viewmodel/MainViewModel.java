@@ -23,7 +23,7 @@ public class MainViewModel extends BaseViewModel {
         PagedList.Config pagedListConfig =
                 (new PagedList.Config.Builder())
                         .setEnablePlaceholders(false)
-                        .setPageSize(200).build();
+                        .setPageSize(100).build();
 
         photoPagedList = new LivePagedListBuilder(photoRepository, pagedListConfig)
                 .build();

@@ -15,6 +15,10 @@ import com.barry.demo.color_img_android_project.adapter.PhotoListAdapter;
 import com.barry.demo.color_img_android_project.network.ColorImgModel;
 import com.barry.demo.color_img_android_project.viewmodel.MainViewModel;
 
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.Collections;
+
 public class MainActivity extends BaseActivity {
 
     private MainViewModel viewModel;

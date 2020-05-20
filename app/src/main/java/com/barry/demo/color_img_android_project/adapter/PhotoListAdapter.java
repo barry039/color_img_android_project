@@ -2,10 +2,6 @@ package com.barry.demo.color_img_android_project.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,9 +18,6 @@ import com.barry.demo.color_img_android_project.ImageLoader;
 import com.barry.demo.color_img_android_project.R;
 import com.barry.demo.color_img_android_project.application.AppApplication;
 import com.barry.demo.color_img_android_project.network.ColorImgModel;
-import com.squareup.picasso.Picasso;
-
-import java.io.InputStream;
 
 
 public class PhotoListAdapter extends PagedListAdapter<ColorImgModel, PhotoListAdapter.ViewHolder> {
@@ -56,8 +49,27 @@ public class PhotoListAdapter extends PagedListAdapter<ColorImgModel, PhotoListA
             ColorImgModel colorImgModel = getItem(position);
             holder.id.setText(colorImgModel.getId() + "");
             holder.title.setText(colorImgModel.getTitle());
-            imageLoader.DisplayImage("https://lh6.ggpht.com/9SZhHdv4URtBzRmXpnWxZcYhkgTQurFuuQ8OR7WZ3R7fyTmha77dYkVvcuqMu3DLvMQ=w300", holder.imageView);
-
+            imageLoader.DisplayImage(colorImgModel.getThumbnailUrl(), holder.imageView);
+//            OkHttpClient client = new OkHttpClient();
+//            Request request = new Request.Builder().url(colorImgModel.getThumbnailUrl()).build();
+//            client.newCall(request).enqueue(new Callback() {
+//                public void onFailure(Call call, IOException e) {
+//                    e.printStackTrace();
+//                }
+//                public void onResponse(Call call, Response response) throws IOException {
+//                    if (!response.isSuccessful()) {
+//                        throw new IOException("Fail" + response);
+//                    }
+//                    InputStream inputStream = response.body().byteStream();
+//                    Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+//                    new Handler(Looper.getMainLooper()).post(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            holder.imageView.setImageBitmap(bitmap);
+//                        }
+//                    });
+//                }
+//            });
         } catch (Exception e) {
             e.printStackTrace();
         }

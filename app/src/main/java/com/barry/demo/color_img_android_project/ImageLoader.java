@@ -4,6 +4,8 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Handler;
+import android.os.Looper;
+import android.os.StrictMode;
 import android.util.Log;
 import android.widget.ImageView;
 
@@ -14,13 +16,21 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Base64;
 import java.util.Collections;
 import java.util.Map;
 import java.util.WeakHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class ImageLoader {
     // Initialize MemoryCache
@@ -43,7 +53,6 @@ public class ImageLoader {
         // Creates a thread pool that reuses a fixed number of
         // threads operating off a shared unbounded queue.
         executorService= Executors.newFixedThreadPool(5);
-
     }
 
     // default image show in list (Before online image download)
@@ -82,6 +91,7 @@ public class ImageLoader {
         // Submits a PhotosLoader runnable task for execution
 
         executorService.submit(new PhotosLoader(p));
+//        executorService.execute(new PhotosLoader(p));
     }
 
     //Task for the queue
@@ -118,7 +128,7 @@ public class ImageLoader {
                     return;
 
                 // Get bitmap to display
-                BitmapDisplayer bd=new BitmapDisplayer(bmp, photoToLoad);
+                BitmapDisplayer bd = new BitmapDisplayer(bmp, photoToLoad);
 
                 // Causes the Runnable bd (BitmapDisplayer) to be added to the message queue.
                 // The runnable will be run on the thread to which this handler is attached.
@@ -134,45 +144,25 @@ public class ImageLoader {
     private Bitmap getBitmap(String url)
     {
         File f=fileCache.getFile(url);
-
-        //from SD cache
-        //CHECK : if trying to decode file which not exist in cache return null
         Bitmap b = decodeFile(f);
         if(b!=null)
             return b;
-
         // Download image file from web
+        Bitmap bitmap=null;
+        FileOutputStream fos = null;
         try {
-
-            Bitmap bitmap=null;
             URL imageUrl = new URL(url);
-            HttpURLConnection conn = (HttpURLConnection)imageUrl.openConnection();
-            conn.setRequestMethod("GET");
-            conn.setConnectTimeout(30000);
-            conn.setReadTimeout(30000);
-            conn.setInstanceFollowRedirects(true);
-            int status = conn.getResponseCode();
-            InputStream is;
-            if (status != HttpURLConnection.HTTP_OK)  {
-                is = conn.getErrorStream();
-            } else {
-                is=conn.getInputStream();
+            Log.e("URL",imageUrl.toString());
+            OkHttpClient client = new OkHttpClient();
+            Request request = new Request.Builder().url(url).build();
+            Response response = client.newCall(request).execute();
+            if (!response.isSuccessful()) {
+                throw new IOException(response + "");
             }
-            Log.e("name",f.getName());
-
-            // Constructs a new FileOutputStream that writes to file
-            // if file not exist then it will create file
-            OutputStream os = new FileOutputStream(f);
-            // See Utils class CopyStream method
-            // It will each pixel from input stream and
-            // write pixels to output stream (file)
-            Utils.CopyStream(is, os);
-
-            os.close();
-            conn.disconnect();
-
-            //Now file created and going to resize file with defined height
-            // Decodes image and scales it to reduce memory consumption
+            fos = new FileOutputStream(f);
+            fos.write(response.body().bytes());
+            fos.flush();
+            fos.close();
             bitmap = decodeFile(f);
 
             return bitmap;
@@ -186,7 +176,7 @@ public class ImageLoader {
     }
 
     //Decodes image and scales it to reduce memory consumption
-    private synchronized Bitmap decodeFile(File f){
+    private Bitmap decodeFile(File f){
 
         try {
 

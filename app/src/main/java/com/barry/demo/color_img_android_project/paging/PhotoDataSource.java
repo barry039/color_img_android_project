@@ -8,6 +8,7 @@ import androidx.paging.PageKeyedDataSource;
 import com.barry.demo.color_img_android_project.network.APIManager;
 import com.barry.demo.color_img_android_project.network.ColorImgModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -63,17 +64,17 @@ public class PhotoDataSource extends PageKeyedDataSource<Long, ColorImgModel> {
                     public void onResponse(Call<List<ColorImgModel>> call, retrofit2.Response<List<ColorImgModel>> response) {
                         try {
                             Log.e("size",response.body().size() + "");
-                            callback.onResult(response.body(), Long.valueOf(response.body().get(response.body().size() - 1).getId()));
+                            callback.onResult(response.body(), Long.valueOf(response.body().get(response.body().size() - 1).getId()) + 1);
                             return;
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
-                        callback.onResult(response.body(), null);
+                        callback.onResult(response.body(), Long.valueOf(params.key));
                     }
 
                     @Override
                     public void onFailure(Call<List<ColorImgModel>> call, Throwable t) {
-
+                        callback.onResult(new ArrayList<>(), Long.valueOf(params.key));
                     }
                 });
     }
