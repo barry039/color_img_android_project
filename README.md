@@ -1,13 +1,13 @@
 # Color Image Parser Project
 
 Loading JsonPlaceholder Photo API data and display in gridlayout.  
-![](https://github.com/barry039/color_img_android_project/blob/master/Screenshot_20200520-222614.png)  
+![](https://github.com/barry039/color_img_android_project/blob/master/Screenshot_20200520-222614.png)
 ![](https://github.com/barry039/color_img_android_project/blob/master/Screenshot_20200520-222621.png)
 ## Description
 
 ### Start Page
 
-Show app anme and request storage permission from user to enter maain page.  
+Show app name and request storage permission from user to enter maain page.  
 
 
 ### Main Page
