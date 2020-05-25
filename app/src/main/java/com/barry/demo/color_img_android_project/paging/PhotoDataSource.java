@@ -80,6 +80,7 @@ public class PhotoDataSource extends PageKeyedDataSource<Long, ColorImgModel> {
                                 return;
                             }
                             callback.onResult(response.body(), Long.valueOf(response.body().get(response.body().size() - 1).getId()));
+                            loadstata_mutablelivedata.postValue(2);
                             return;
                         } catch (Exception e) {
                             e.printStackTrace();

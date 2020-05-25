@@ -86,6 +86,7 @@ public class MainActivity extends BaseActivity {
                             swipelayout.setRefreshing(false);
                             break;
                         default:
+                            swipelayout.setRefreshing(false);
                             break;
                     }
                 }
