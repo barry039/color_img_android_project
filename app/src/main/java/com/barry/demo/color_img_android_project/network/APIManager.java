@@ -1,25 +1,14 @@
 package com.barry.demo.color_img_android_project.network;
 
-import android.util.Log;
-
-import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
-import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
-import okhttp3.RequestBody;
-import okhttp3.ResponseBody;
-import okhttp3.logging.HttpLoggingInterceptor;
-import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class APIManager {
 
-    private String TAG = this.getClass().getSimpleName();
-
-    private EndPoint endPoint;
+    private final EndPoint endPoint;
 
     private static APIManager INSTANCE = null;
 
@@ -27,7 +16,7 @@ public class APIManager {
 
     private OkHttpClient okHttpClient;
 
-    private APIService apiService;
+    private final APIService apiService;
 
     // singleton get func
     public synchronized static APIManager getINSTANCE() {

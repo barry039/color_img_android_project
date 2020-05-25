@@ -1,18 +1,14 @@
 package com.barry.demo.color_img_android_project.activities;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 
 import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 
 import com.barry.demo.color_img_android_project.R;
 
 public class StartActivity extends BaseActivity {
-
-    private final int STORAGE_REQ_CODE = 1001;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,12 +19,7 @@ public class StartActivity extends BaseActivity {
 
     @Override
     void bindView() {
-        findViewById(R.id.start_btn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                intenttoMain();
-            }
-        });
+        findViewById(R.id.start_btn).setOnClickListener(v -> intenttoMain());
     }
 
     private void intenttoMain() {
@@ -39,7 +30,7 @@ public class StartActivity extends BaseActivity {
             startActivity(mainIntent);
             finish();
         } else {
-            requestPermission(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE},STORAGE_REQ_CODE);
+            requestPermission(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE});
         }
     }
 
@@ -51,6 +42,7 @@ public class StartActivity extends BaseActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        int STORAGE_REQ_CODE = 1001;
         if (requestCode == STORAGE_REQ_CODE) {
             intenttoMain();
         }

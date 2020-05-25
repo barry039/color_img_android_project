@@ -4,8 +4,8 @@ import android.content.Context;
 
 import java.io.File;
 
-public class FileCache {
-    private File cacheDir;
+class FileCache {
+    private final File cacheDir;
 
     public FileCache(Context context){
 
@@ -24,9 +24,10 @@ public class FileCache {
             cacheDir=context.getCacheDir();
         }
 
-        if(!cacheDir.exists()){
-            // create cache dir in your application context
-            cacheDir.mkdirs();
+        boolean isDirectoryCreated= cacheDir.exists();
+        if (!isDirectoryCreated) {
+            //noinspection UnusedAssignment
+            isDirectoryCreated = cacheDir.mkdirs();
         }
     }
 
@@ -34,8 +35,7 @@ public class FileCache {
         //Identify images by hashcode or encode by URLEncoder.encode.
         String filename=String.valueOf(url.hashCode());
 
-        File f = new File(cacheDir, filename);
-        return f;
+        return new File(cacheDir, filename);
 
     }
 
@@ -45,7 +45,11 @@ public class FileCache {
         if(files==null)
             return;
         //delete all cache directory files
-        for(File f:files)
-            f.delete();
+        for(File f:files) {
+            if (f != null) {
+                //noinspection ResultOfMethodCallIgnored
+                f.delete();
+            }
+        }
     }
 }

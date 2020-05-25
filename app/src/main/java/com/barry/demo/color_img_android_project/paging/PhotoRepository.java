@@ -10,20 +10,15 @@ import com.barry.demo.color_img_android_project.network.ColorImgModel;
 
 
 public class PhotoRepository extends DataSource.Factory {
-    private PhotoDataSource photoDataSource;
+    private final PhotoDataSource photoDataSource;
     public PhotoRepository() {
         photoDataSource = new PhotoDataSource();
+        MutableLiveData<PageKeyedDataSource<Long, ColorImgModel>> dataset_mutablelivedata = new MutableLiveData<>();
         dataset_mutablelivedata.postValue(photoDataSource);
         loadstate_mutablelivedata = photoDataSource.getLoadstata_mutablelivedata();
     }
 
-    private MutableLiveData<PageKeyedDataSource<Long, ColorImgModel>> dataset_mutablelivedata = new MutableLiveData<>();
-
-    private LiveData<Integer> loadstate_mutablelivedata;
-
-    public MutableLiveData<PageKeyedDataSource<Long, ColorImgModel>> getDataset_mutablelivedata() {
-        return dataset_mutablelivedata;
-    }
+    private final LiveData<Integer> loadstate_mutablelivedata;
 
     public LiveData<Integer> getLoadstate_mutablelivedata() {
         return loadstate_mutablelivedata;

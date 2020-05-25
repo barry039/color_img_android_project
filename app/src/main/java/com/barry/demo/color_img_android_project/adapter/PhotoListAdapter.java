@@ -19,18 +19,19 @@ import com.barry.demo.color_img_android_project.R;
 import com.barry.demo.color_img_android_project.application.AppApplication;
 import com.barry.demo.color_img_android_project.network.ColorImgModel;
 
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Objects;
+
 
 public class PhotoListAdapter extends PagedListAdapter<ColorImgModel, PhotoListAdapter.ViewHolder> {
 
-    private Context context;
+    private final LayoutInflater layoutInflater;
 
-    private LayoutInflater layoutInflater;
-
-    public ImageLoader imageLoader;
+    private final ImageLoader imageLoader;
 
     public PhotoListAdapter(Context context) {
         super(DIFF_CALLBACK);
-        this.context = context;
         layoutInflater = LayoutInflater.from(context);
         imageLoader = new ImageLoader(AppApplication.getINSTANCE());
     }
@@ -39,15 +40,15 @@ public class PhotoListAdapter extends PagedListAdapter<ColorImgModel, PhotoListA
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = layoutInflater.inflate(R.layout.layout_photo_item,parent,false);
-        ViewHolder viewHolder = new ViewHolder(view);
-        return viewHolder;
+        return new ViewHolder(view);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         try {
             ColorImgModel colorImgModel = getItem(position);
-            holder.id.setText(colorImgModel.getId() + "");
+            holder.id.setText(Objects.requireNonNull(colorImgModel).getId() + "");
             holder.title.setText(colorImgModel.getTitle());
             imageLoader.DisplayImage(colorImgModel.getThumbnailUrl(), holder.imageView);
         } catch (Exception e) {
@@ -55,7 +56,7 @@ public class PhotoListAdapter extends PagedListAdapter<ColorImgModel, PhotoListA
         }
     }
 
-    private static DiffUtil.ItemCallback<ColorImgModel> DIFF_CALLBACK =
+    private static final DiffUtil.ItemCallback<ColorImgModel> DIFF_CALLBACK =
             new DiffUtil.ItemCallback<ColorImgModel>() {
                 @Override
                 public boolean areItemsTheSame(ColorImgModel oldItem, ColorImgModel newItem) {
@@ -64,15 +65,16 @@ public class PhotoListAdapter extends PagedListAdapter<ColorImgModel, PhotoListA
 
                 @SuppressLint("DiffUtilEquals")
                 @Override
-                public boolean areContentsTheSame(ColorImgModel oldItem, ColorImgModel newItem) {
+                public boolean areContentsTheSame(@NotNull ColorImgModel oldItem, @NotNull ColorImgModel newItem) {
                     return oldItem == newItem;
                 }
             };
 
-    class ViewHolder extends RecyclerView.ViewHolder {
-        private ImageView imageView;
-        private TextView id,title;
-        public ViewHolder(@NonNull View itemView) {
+    static class ViewHolder extends RecyclerView.ViewHolder {
+        private final ImageView imageView;
+        private final TextView id;
+        private final TextView title;
+        ViewHolder(@NonNull View itemView) {
             super(itemView);
             imageView = itemView.findViewById(R.id.layout_photo_imageview);
             id = itemView.findViewById(R.id.layout_photo_id_textview);

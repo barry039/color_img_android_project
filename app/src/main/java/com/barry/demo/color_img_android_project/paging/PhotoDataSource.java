@@ -9,20 +9,20 @@ import androidx.paging.PageKeyedDataSource;
 import com.barry.demo.color_img_android_project.network.APIManager;
 import com.barry.demo.color_img_android_project.network.ColorImgModel;
 
-import java.util.ArrayList;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 
 
-public class PhotoDataSource extends PageKeyedDataSource<Long, ColorImgModel> {
+class PhotoDataSource extends PageKeyedDataSource<Long, ColorImgModel> {
 
-    private long since = 0;
+    private final int page_per_size = 400;
 
-    private int page_per_size = 400;
-
-    private MutableLiveData<Integer> loadstata_mutablelivedata = new MutableLiveData<>();
+    private final MutableLiveData<Integer> loadstata_mutablelivedata = new MutableLiveData<>();
 
     public MutableLiveData<Integer> getLoadstata_mutablelivedata() {
         return loadstata_mutablelivedata;
@@ -32,15 +32,16 @@ public class PhotoDataSource extends PageKeyedDataSource<Long, ColorImgModel> {
     public void loadInitial(@NonNull LoadInitialParams<Long> params, @NonNull final LoadInitialCallback<Long, ColorImgModel> callback) {
         Log.e("data","call");
         loadstata_mutablelivedata.postValue(1);
+        long since = 0;
         APIManager.getINSTANCE()
                 .getApiService()
                 .getPhoto(String.valueOf(since),String.valueOf(page_per_size))
                 .enqueue(new Callback<List<ColorImgModel>>() {
                     @Override
-                    public void onResponse(Call<List<ColorImgModel>> call, retrofit2.Response<List<ColorImgModel>> response) {
+                    public void onResponse(@NotNull Call<List<ColorImgModel>> call, @NotNull retrofit2.Response<List<ColorImgModel>> response) {
                         try {
-                            Log.e("size",response.body().size() + "");
-                            callback.onResult(response.body(), null, Long.valueOf(response.body().get(response.body().size() - 1).getId()));
+                            Log.e("size", Objects.requireNonNull(response.body()).size() + "");
+                            callback.onResult(response.body(), null, (long) response.body().get(response.body().size() - 1).getId());
                             loadstata_mutablelivedata.postValue(2);
                             return;
                         } catch (Exception e) {
@@ -52,7 +53,7 @@ public class PhotoDataSource extends PageKeyedDataSource<Long, ColorImgModel> {
                     }
 
                     @Override
-                    public void onFailure(Call<List<ColorImgModel>> call, Throwable t) {
+                    public void onFailure(@NotNull Call<List<ColorImgModel>> call, @NotNull Throwable t) {
                         loadInitial(params,callback);
                         loadstata_mutablelivedata.postValue(3);
                     }
@@ -72,14 +73,14 @@ public class PhotoDataSource extends PageKeyedDataSource<Long, ColorImgModel> {
                 .getPhoto(String.valueOf(params.key),String.valueOf(page_per_size))
                 .enqueue(new Callback<List<ColorImgModel>>() {
                     @Override
-                    public void onResponse(Call<List<ColorImgModel>> call, retrofit2.Response<List<ColorImgModel>> response) {
+                    public void onResponse(@NotNull Call<List<ColorImgModel>> call, @NotNull retrofit2.Response<List<ColorImgModel>> response) {
                         try {
-                            if (response.body().size() == 0) {
+                            if (Objects.requireNonNull(response.body()).size() == 0) {
                                 callback.onResult(response.body(), null);
                                 loadstata_mutablelivedata.postValue(2);
                                 return;
                             }
-                            callback.onResult(response.body(), Long.valueOf(response.body().get(response.body().size() - 1).getId()));
+                            callback.onResult(response.body(), (long) response.body().get(response.body().size() - 1).getId());
                             loadstata_mutablelivedata.postValue(2);
                             return;
                         } catch (Exception e) {
@@ -90,7 +91,7 @@ public class PhotoDataSource extends PageKeyedDataSource<Long, ColorImgModel> {
                     }
 
                     @Override
-                    public void onFailure(Call<List<ColorImgModel>> call, Throwable t) {
+                    public void onFailure(@NotNull Call<List<ColorImgModel>> call, @NotNull Throwable t) {
                         loadAfter(params,callback);
                         loadstata_mutablelivedata.postValue(3);
                     }

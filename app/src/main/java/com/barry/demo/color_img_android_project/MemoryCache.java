@@ -8,12 +8,12 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class MemoryCache {
+class MemoryCache {
     private static final String TAG = "MemoryCache";
 
     //Last argument true for LRU ordering
-    private Map<String, Bitmap> cache = Collections.synchronizedMap(
-            new LinkedHashMap<String, Bitmap>(10,1.5f,true));
+    private final Map<String, Bitmap> cache = Collections.synchronizedMap(
+            new LinkedHashMap<>(10, 1.5f, true));
 
     //current allocated size
     private long size=0;
@@ -27,7 +27,7 @@ public class MemoryCache {
         setLimit(Runtime.getRuntime().maxMemory()/4);
     }
 
-    public void setLimit(long new_limit){
+    private void setLimit(long new_limit){
 
         limit=new_limit;
         Log.i(TAG, "MemoryCache will use up to "+limit/1024./1024.+"MB");
@@ -86,7 +86,7 @@ public class MemoryCache {
         }
     }
 
-    long getSizeInBytes(Bitmap bitmap) {
+    private long getSizeInBytes(Bitmap bitmap) {
         if(bitmap==null)
             return 0;
         return bitmap.getRowBytes() * bitmap.getHeight();

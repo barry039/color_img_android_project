@@ -10,49 +10,27 @@ public class ColorImgModel {
      * thumbnailUrl : https://via.placeholder.com/150/92c952
      */
 
+    @SuppressWarnings("unused")
     private int albumId;
+    @SuppressWarnings("unused")
     private int id;
+    @SuppressWarnings("unused")
     private String title;
+    @SuppressWarnings("unused")
     private String url;
+    @SuppressWarnings("unused")
     private String thumbnailUrl;
-
-    public int getAlbumId() {
-        return albumId;
-    }
-
-    public void setAlbumId(int albumId) {
-        this.albumId = albumId;
-    }
 
     public int getId() {
         return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getTitle() {
         return title;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
     public String getThumbnailUrl() {
         return thumbnailUrl;
     }
 
-    public void setThumbnailUrl(String thumbnailUrl) {
-        this.thumbnailUrl = thumbnailUrl;
-    }
 }

@@ -11,7 +11,7 @@ import androidx.core.app.ActivityCompat;
 
 public abstract class BaseActivity extends AppCompatActivity {
 
-    protected String TAG = this.getClass().getSimpleName();
+    final String TAG = this.getClass().getSimpleName();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -35,14 +35,14 @@ public abstract class BaseActivity extends AppCompatActivity {
     ===================================
     */
 
-    protected boolean checkPermission(String permission)
+    boolean checkPermission(String permission)
     {
         return ActivityCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED;
     }
 
-    protected void requestPermission(String[] permissions,int request_code)
+    void requestPermission(String[] permissions)
     {
-        ActivityCompat.requestPermissions(this, permissions, request_code);
+        ActivityCompat.requestPermissions(this, permissions, 1001);
     }
 
 }

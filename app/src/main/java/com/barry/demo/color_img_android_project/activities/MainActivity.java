@@ -4,7 +4,6 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.paging.PagedList;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
@@ -17,13 +16,7 @@ import com.barry.demo.color_img_android_project.adapter.PhotoListAdapter;
 import com.barry.demo.color_img_android_project.network.ColorImgModel;
 import com.barry.demo.color_img_android_project.viewmodel.MainViewModel;
 
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.Collections;
-
 public class MainActivity extends BaseActivity {
-
-    private MainViewModel viewModel;
 
     private RecyclerView img_color_recyclerview;
 
@@ -43,10 +36,11 @@ public class MainActivity extends BaseActivity {
         swipelayout = findViewById(R.id.swipelayout);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     void init() {
         // init viewmodel
-        viewModel = new ViewModelProvider(this).get(MainViewModel.class);
+        MainViewModel viewModel = new ViewModelProvider(this).get(MainViewModel.class);
         adapter = new PhotoListAdapter(this);
         Log.e(TAG,"created adapter");
 
@@ -55,40 +49,24 @@ public class MainActivity extends BaseActivity {
         Log.e(TAG,"set adapter");
 
         // observer data
-        viewModel.getUserPagedList().observe(this, new Observer<PagedList<ColorImgModel>>() {
-            @Override
-            public void onChanged(PagedList<ColorImgModel> colorImgModels) {
-                adapter.submitList(colorImgModels);
-            }
-        });
+        // noinspection unchecked
+        viewModel.getUserPagedList().observe(this, (Observer<PagedList<ColorImgModel>>) colorImgModels -> adapter.submitList(colorImgModels));
 
-        viewModel.getLoadStata_MutableLivedata().observe(this, new Observer<Integer>() {
-            @Override
-            public void onChanged(Integer integer) {
-                if (integer != null) {
-                    switch (integer) {
-                        case 0:
-                            swipelayout.setRefreshing(false);
-                            break;
-                        case 1:
-                            swipelayout.setRefreshing(true);
-                            break;
-                        case 2:
-                            swipelayout.setRefreshing(false);
-                            break;
-                        case 3:
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Toast.makeText(MainActivity.this,"api timeout error, tring again",Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                            swipelayout.setRefreshing(false);
-                            break;
-                        default:
-                            swipelayout.setRefreshing(false);
-                            break;
-                    }
+        viewModel.getLoadStata_MutableLivedata().observe(this, integer -> {
+            if (integer != null) {
+                switch (integer) {
+                    case 1:
+                        swipelayout.setRefreshing(true);
+                        break;
+                    case 3:
+                        runOnUiThread(() -> Toast.makeText(MainActivity.this, "api timeout error, tring again", Toast.LENGTH_SHORT).show());
+                        swipelayout.setRefreshing(false);
+                        break;
+                    case 0:
+                    case 2:
+                    default:
+                        swipelayout.setRefreshing(false);
+                        break;
                 }
             }
         });

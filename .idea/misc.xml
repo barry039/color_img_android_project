@@ -1,5 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="EntryPointsManager">
+    <entry_points version="2.0">
+      <entry_point TYPE="field" FQNAME="com.barry.demo.color_img_android_project.network.ColorImgModel albumId" />
+      <entry_point TYPE="field" FQNAME="com.barry.demo.color_img_android_project.network.ColorImgModel id" />
+      <entry_point TYPE="field" FQNAME="com.barry.demo.color_img_android_project.network.ColorImgModel thumbnailUrl" />
+      <entry_point TYPE="field" FQNAME="com.barry.demo.color_img_android_project.network.ColorImgModel title" />
+      <entry_point TYPE="field" FQNAME="com.barry.demo.color_img_android_project.network.ColorImgModel url" />
+    </entry_points>
+    <pattern value="com.barry.demo.color_img_android_project.network.ColorImgModel" />
+    <pattern value="com.barry.demo.color_img_android_project.FileCache" method="clear" />
+  </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>

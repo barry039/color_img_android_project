@@ -1,13 +1,12 @@
 package com.barry.demo.color_img_android_project.network;
 
-public class EndPoint {
-
-    private String baseurl = "https://jsonplaceholder.typicode.com/";
+class EndPoint {
 
     public EndPoint() {
     }
 
+    @SuppressWarnings("SameReturnValue")
     public String getBaseurl() {
-        return baseurl;
+        return "https://jsonplaceholder.typicode.com/";
     }
 }
